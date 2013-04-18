@@ -49,9 +49,11 @@ CONFIG_EFI_VARS_PSTORE=y
 ```
 
 **Trouble:**
-It seems that in more recent kernel there is a regression and efibootmgr not be able to write the efi vars. I could not understand which version this bug (https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1167567) was introduced. I can only assure you that up to version 3.6.5 the bug does not occur, and certainly occurs in version 3.8. * And later. (also: https://bugzilla.redhat.com/show_bug.cgi?format=multiple&id=922275)
-Unfortunately if efibootmgr can not edit the variables fails silently, so if during a kernel update efiqo seems to end successfully, but no new entry appears and dmesg shows efivars: set_variable () failed: status = 8000000000000009
-congratulations, you have discovered the bug.
+
+It seems that in more recent kernel there is a regression and efibootmgr not be able to write the efi vars. I could not understand which version this bug (https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1167567) was introduced. I can only assure you that up to version 3.6.5 the bug does not occur, and certainly occurs in version 3.8. * and later. (also: https://bugzilla.redhat.com/show_bug.cgi?format=multiple&id=922275)
+
+Unfortunately if efibootmgr can not edit the variables fails silently, so if during a kernel update efiqo seems to end successfully, but no new entry appears and dmesg shows `efivars: set_variable () failed: status = 8000000000000009` congratulations, you have discovered the bug.
+if someone finds a solution (that does not involve using a version of the kernel that is not affected by the bug), please let me know.
 
 License
 =========
