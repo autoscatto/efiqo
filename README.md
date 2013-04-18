@@ -17,7 +17,9 @@ Installation note
 git clone git://github.com/autoscatto/efiqo.git
 su
 make install
+vi /etc/default/efiqo (to edit your config)
 ```
+
 
 **Uninstall:**
 ```sh
@@ -29,7 +31,7 @@ make uninstall
 Kernel
 =========
 The default kernel debian is already compiled with efi support. 
-In case you have a kernel that you make sure it has the efi stub enabled
+In case you have an autocompiled kernel that you make sure it has the efi stub enabled
 ```sh
 Processor type and features --->
   [*] EFI runtime service support
@@ -46,7 +48,10 @@ CONFIG_EFI_VARS=y
 CONFIG_EFI_VARS_PSTORE=y
 ```
 
-
+**Trouble:**
+It seems that in more recent kernel there is a regression and efibootmgr not be able to write the efi vars. I could not understand which version this bug (https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1167567) was introduced. I can only assure you that up to version 3.6.5 the bug does not occur, and certainly occurs in version 3.8. * And later. (also: https://bugzilla.redhat.com/show_bug.cgi?format=multiple&id=922275)
+Unfortunately if efibootmgr can not edit the variables fails silently, so if during a kernel update efiqo seems to end successfully, but no new entry appears and dmesg shows efivars: set_variable () failed: status = 8000000000000009
+congratulations, you have discovered the bug.
 
 License
 =========
