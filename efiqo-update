@@ -1,0 +1,13 @@
+#!/bin/sh -e
+#
+
+echo >&2 "[efiqo] Generating UEFI boot entry for $1" 
+if [ -f "/boot/vmlinuz-$1" ]; then
+    /usr/sbin/efiqo "/boot/vmlinuz-$1"
+else
+	echo >&2 "KERNEL NAME NOT IN DEBIAN FORM!!! Not expected kernel name $1 (i need vmlinuz-\$version)!\nplease uninstall efiqo or modify for your configuration"
+	exit 2
+fi
+
+
+exit 0

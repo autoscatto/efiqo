@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# please use in moderation
+source "/etc/default/efiqo"
+if [ "$ENABLED" -ne "0" ]; then
+	EXPECTED_ARGS=1
+	E_BADARGS=65
+
+	if [ $# -ne $EXPECTED_ARGS ]; then
+  		echo "Usage: `basename $0` kernelpath"
+		echo "This script is made only to be executed automagically after kernel update, Sstart it manually if you know what you're doing. You are warned."
+  		exit $E_BADARGS
+	fi
+
+	if [[ "$1" != *vmlinuz* ]]
+	then
+	  echo >&2 "KERNEL NAME NOT IN DEBIAN FORM!!! Not expected kernel name $1 (i need vmlinuz-\$version)!"
+	  exit 2
+	fi
+
+	SUFFIX=${1#vmlinuz}
+
+	modprobe efivars
+	if [ "$?" -ne "0" ]; then
+		 	echo >&2 "EFIVARS MOD NOT LOADED!!! please check why modprobe efivars fails." 
+			exit 2
+	fi
+	
+	# preparing dir under efi partition
+	rm -f $MOUNTP/EFI/efiqo/*$SUFFIX
+	EPATH=$MOUNTP/EFI/efiqo
+	mkdir -p $EPATH
+
+	# command string
+	cstring="root=UUID=${UUID} ro rootfstype=${TYPE} ${command} add_efi_memmap" 
+
+	# copying kernel and initrd if needed (renamed in vmlinuz.efi and initrd.img)
+	cp $1 $EPATH/vmlinuz.efi
+
+	if [ "$INITRD"  -ne "0" ]; then
+		rm -f $EPATH/initrd.img
+		cp ${1/vmlinuz/initrd.img} $EPATH/initrd.img
+		INITO="/EFI/efiqo/initrd.img"
+		# add initrd with / escaped in \
+		cstring="$cstring initrd=${INITO//[\/]/\\}"
+	fi
+	echo "$cstring"
+	echo "$cstring" | iconv -t ucs2 | efibootmgr -c -g -O -d "$DISK" -p "$PARTITION" -L "$LABEL" -l 'EFI\efiqo\vmlinuz.efi' -@ -
+	exit 0
+
+else
+	echo >&2 "EFIQO NOT ENBLED!!! please edit config file at /etc/default/efiqo" 
+fi
+

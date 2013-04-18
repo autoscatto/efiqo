@@ -1,0 +1,31 @@
+################################################
+####      CONFIG FILE FOR EFIQO SCRIPT      ####
+################################################
+# please bash escaped strings where needed
+
+# set at 1 after config
+ENABLED=0
+
+# device where EFI partition resides
+DISK="/dev/sda"
+
+# number of EFI partition (es: 2 for /dev/sda2 etc) 
+PARTITION=2
+
+# where EFI partition is mounted on system
+MOUNTP="/boot/efi"
+
+# set to 0 if the kernel don't need initrd for booting
+INITRD=1
+
+# kernel boot command-line parameter (quiet, elevator=deadline, etc)
+COMMAND="" 
+
+# UUID of root partition (es: blkid $ROOTPARTITION -o value -s UUID)
+UUID=""
+
+# fs type of root partition (es: blkid $ROOTPARTITION -o value -s TYPE)
+TYPE="ext4"
+
+# label for uefi bootloader entry
+LABEL="Efiqo Kernel"
