@@ -31,7 +31,7 @@ if [ "$ENABLED" -ne "0" ]; then
 	mkdir -p $EPATH
 
 	# command string
-	cstring="root=UUID=${UUID} ro rootfstype=${TYPE} ${command} add_efi_memmap" 
+	cstring="root=UUID=${UUID} ro rootfstype=${TYPE} ${COMMAND} add_efi_memmap" 
 
 	# copying kernel and initrd if needed (renamed in vmlinuz.efi and initrd.img)
 	cp $1 $EPATH/vmlinuz.efi
